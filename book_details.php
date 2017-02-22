@@ -1,8 +1,19 @@
 <?php
 include_once('database.php'); // include the database connection file
 
-$book = ""; // this is just a placeholder
-
+$bookID = $_GET["bookID"]; // this is just a placeholder
+if($bookID == 0) {
+    $book = null;
+    $isAddition = 1;
+} else {
+    $isAddition = 0;
+    $query = "SELECT * FROM books WHERE Id = :book_id "; // SQL statement
+    $statement = $db->prepare($query); // encapsulate the sql statement
+    $statement->bindValue(':game_id', $bookID);
+    $statement->execute(); // run on the db server
+    $book = $statement->fetch(); // returns only one record
+    $statement->closeCursor(); // close the connection
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +28,6 @@ $book = ""; // this is just a placeholder
     <link rel="stylesheet" href="./Content/app.css">
 </head>
 <body>
-
 <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
